@@ -50,6 +50,6 @@ jobs:
         with:
           tagName: v__VERSION__
           releaseName: "jev-resume v__VERSION__"
-          releaseBody: "下载对应平台安装包。判定由 AI 模型生成, 仅供参考; 需自行配置 TypeSafe API Key。macOS 包未签名, 首次打开需右键 -> 打开。"
+          releaseBody: "下载对应平台安装包。判定由 AI 模型生成, 仅供参考; 需自行配置 TypeSafe API Key。macOS 包未签名: 安装后在终端执行 xattr -cr /Applications/jev-resume.app 即可打开。"
           releaseDraft: false
           prerelease: false

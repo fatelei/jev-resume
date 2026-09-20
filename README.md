@@ -61,8 +61,8 @@ concurrency = 4
 
 推送 `v*` tag（或手动 workflow_dispatch）触发三平台发布构建，产物自动挂到 GitHub Release：
 
-- macOS: `.dmg` / `.app.tar.gz`（未签名，首次打开需右键 → 打开）
-- Windows: `-setup.exe` (NSIS) / `.msi`
+- macOS: `.dmg` / `.app.tar.gz`（未签名，安装后执行 `xattr -cr /Applications/jev-resume.app` 即可打开；或系统设置 → 隐私与安全性 → 仍要打开）
+- Windows: `-setup.exe` (NSIS) / `.msi`（SmartScreen 提示点「仍要运行」）
 - Linux: `.deb` / `.AppImage` / `.rpm`
 
 pdfium 动态库已通过 `bundle.resources` 打入安装包，macOS / Windows / AppImage 开箱即用；`.deb` 如提示找不到 pdfium，设置环境变量 `PDFIUM_DYNAMIC_LIB_PATH` 指向系统 pdfium 即可。
