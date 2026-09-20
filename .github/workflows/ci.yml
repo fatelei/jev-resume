@@ -36,7 +36,7 @@ jobs:
         shell: bash
         run: |
           mkdir -p vendor/pdfium
-          curl -sL "https://github.com/bblanchon/pdfium-binaries/releases/download/chromium/6943/${{ matrix.pdfium_asset }}" -o vendor/pdfium/asset
+          curl -sL "https://github.com/bblanchon/pdfium-binaries/releases/download/chromium/8057/${{ matrix.pdfium_asset }}" -o vendor/pdfium/asset
           cd vendor/pdfium
           case "${{ matrix.pdfium_asset }}" in
             *.tgz) tar -xzf asset ;;

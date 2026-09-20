@@ -3,7 +3,7 @@
 # CI 中每平台同样逻辑（见 .github/workflows/ci.yml）
 set -euo pipefail
 
-VERSION="6943"
+VERSION="8057"
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 OUT="$ROOT/vendor/pdfium"
 mkdir -p "$OUT"
