@@ -1,0 +1,55 @@
+name: Release
+
+# 打 tag (v*) 或手动触发: 三平台构建安装包并发布 GitHub Release
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-14
+          - os: ubuntu-24.04
+          - os: windows-2022
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: crates/jev-app/ui/package-lock.json
+
+      # 下载 pdfium: tauri build 的 bundle.resources glob 需要该目录存在
+      - name: Provision pdfium
+        shell: bash
+        run: ./scripts/fetch-pdfium.sh
+
+      - name: Install Linux system deps (tauri)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev build-essential curl wget file \
+            libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev libfuse2
+
+      - uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: v__VERSION__
+          releaseName: "jev-resume v__VERSION__"
+          releaseBody: "下载对应平台安装包。判定由 AI 模型生成, 仅供参考; 需自行配置 TypeSafe API Key。macOS 包未签名, 首次打开需右键 -> 打开。"
+          releaseDraft: false
+          prerelease: false

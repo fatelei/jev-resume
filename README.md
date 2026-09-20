@@ -57,6 +57,16 @@ concurrency = 4
 
 分类体系在 `config.toml` 同目录的 `criteria.toml`：9 个默认分类的 `description` 是判定标准本身，改措辞即改判定；每次保存自动递增版本号，旧缓存自动失效。与 zhihu-jev 相同的校准流程：拿 ~20 份你有把握的简历当测试集，只改判据措辞，直到判定与你的判断一致。
 
+## 安装包（GitHub Release）
+
+推送 `v*` tag（或手动 workflow_dispatch）触发三平台发布构建，产物自动挂到 GitHub Release：
+
+- macOS: `.dmg` / `.app.tar.gz`（未签名，首次打开需右键 → 打开）
+- Windows: `-setup.exe` (NSIS) / `.msi`
+- Linux: `.deb` / `.AppImage` / `.rpm`
+
+pdfium 动态库已打入安装包（`bundle.resources`），安装后无需任何环境变量。
+
 ## License
 
 MIT
