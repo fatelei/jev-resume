@@ -12,13 +12,10 @@ jobs:
       matrix:
         include:
           - os: macos-14
-            pdfium_asset: pdfium-mac-arm64.tgz
             pdfium_lib: libpdfium.dylib
           - os: ubuntu-24.04
-            pdfium_asset: pdfium-linux-x64.tgz
             pdfium_lib: libpdfium.so
           - os: windows-2022
-            pdfium_asset: pdfium-win-x64.zip
             pdfium_lib: pdfium.dll
     runs-on: ${{ matrix.os }}
     env:
@@ -26,7 +23,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: dtolnay/rust-toolchain@stable
+      # 与 rust-toolchain.toml 的 pin 一致, 确保 clippy/rustfmt 装到同一工具链
+      - uses: dtolnay/rust-toolchain@1.98.1
         with:
           components: clippy, rustfmt
 

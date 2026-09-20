@@ -22,7 +22,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: dtolnay/rust-toolchain@stable
+      # 与 rust-toolchain.toml 的 pin 一致
+      - uses: dtolnay/rust-toolchain@1.98.1
 
       - uses: Swatinem/rust-cache@v2
 
