@@ -39,7 +39,7 @@ npm run dev
 
 ## API Key
 
-首次运行前编辑配置文件（自动生成）填入 TypeSafe API Key：
+**推荐**：应用内点「设置」（未配置 Key 时顶部提示可直接点击）填入 TypeSafe API Key，保存即生效。也可以直接编辑配置文件：
 
 - macOS: `~/Library/Application Support/jev-resume/config.toml`
 - Windows: `%APPDATA%\jev-resume\config.toml`
@@ -52,7 +52,7 @@ model = "jev-latest"
 concurrency = 4
 ```
 
-未配置 Key 时应用顶部会有提示；改配置文件后无需重启，下一批次即生效。
+改配置文件后无需重启，下一批次即生效。
 
 ## 判据校准
 
