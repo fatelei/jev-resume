@@ -5,51 +5,48 @@
 <style>
   * { margin: 0; padding: 0; }
   body { width: 1024px; height: 1024px; overflow: hidden; background: transparent; }
+  /* macOS 图标网格: 1024 画布, 内容 824, 四周留 100 透明边距, 圆角 185 */
   .canvas {
-    position: relative; width: 1024px; height: 1024px;
+    position: absolute; left: 100px; top: 100px; width: 824px; height: 824px;
     background: linear-gradient(160deg, #3b82f6 0%, #2563eb 45%, #1e3a8a 100%);
     border-radius: 185px;
   }
-  /* 背景微光 */
   .glow {
-    position: absolute; width: 720px; height: 720px; left: -180px; top: -180px;
+    position: absolute; width: 640px; height: 640px; left: -160px; top: -160px;
     background: radial-gradient(circle, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0) 65%);
   }
-  /* 简历纸 */
   .sheet {
-    position: absolute; left: 262px; top: 172px; width: 500px; height: 680px;
+    position: absolute; left: 212px; top: 137px; width: 400px; height: 550px;
     background: #ffffff;
-    border-radius: 36px;
-    box-shadow: 0 28px 60px rgba(15, 23, 42, 0.38);
-    padding: 64px 56px;
+    border-radius: 30px;
+    box-shadow: 0 22px 48px rgba(15, 23, 42, 0.38);
+    padding: 52px 46px;
     box-sizing: border-box;
   }
-  /* 折角 */
   .fold {
-    position: absolute; right: 0; top: 0; width: 110px; height: 110px;
+    position: absolute; right: 0; top: 0; width: 90px; height: 90px;
     background: linear-gradient(225deg, #dbeafe 50%, #eff6ff 50%);
-    border-radius: 0 36px 0 28px;
+    border-radius: 0 30px 0 24px;
   }
   .name {
-    width: 240px; height: 44px; border-radius: 12px;
-    background: #1e293b; margin-bottom: 36px;
+    width: 190px; height: 36px; border-radius: 10px;
+    background: #1e293b; margin-bottom: 30px;
   }
   .line {
-    height: 20px; border-radius: 10px; background: #cbd5e1; margin-bottom: 26px;
+    height: 17px; border-radius: 9px; background: #cbd5e1; margin-bottom: 22px;
   }
   .line.w80 { width: 80%; }
   .line.w90 { width: 90%; }
   .line.w70 { width: 70%; }
-  .gap { height: 26px; }
-  /* 四维判定条 */
-  .dims { position: absolute; left: 56px; bottom: 56px; width: 388px; }
-  .dim { display: flex; align-items: center; margin-bottom: 22px; }
-  .dot { width: 30px; height: 30px; border-radius: 9px; margin-right: 20px; }
-  .bar { height: 22px; border-radius: 11px; }
-  .d1 .dot { background: #2563eb; } .d1 .bar { width: 250px; background: #93c5fd; }
-  .d2 .dot { background: #0d9488; } .d2 .bar { width: 200px; background: #5eead4; }
-  .d3 .dot { background: #d97706; } .d3 .bar { width: 150px; background: #fcd34d; }
-  .d4 .dot { background: #dc2626; } .d4 .bar { width: 90px;  background: #fca5a5; }
+  .gap { height: 22px; }
+  .dims { position: absolute; left: 46px; bottom: 46px; width: 308px; }
+  .dim { display: flex; align-items: center; margin-bottom: 18px; }
+  .dot { width: 25px; height: 25px; border-radius: 7px; margin-right: 16px; }
+  .bar { height: 18px; border-radius: 9px; }
+  .d1 .dot { background: #2563eb; } .d1 .bar { width: 200px; background: #93c5fd; }
+  .d2 .dot { background: #0d9488; } .d2 .bar { width: 160px; background: #5eead4; }
+  .d3 .dot { background: #d97706; } .d3 .bar { width: 120px; background: #fcd34d; }
+  .d4 .dot { background: #dc2626; } .d4 .bar { width: 70px;  background: #fca5a5; }
   .dim:last-child { margin-bottom: 0; }
 </style>
 </head>
