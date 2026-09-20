@@ -33,6 +33,15 @@ jobs:
           cache: npm
           cache-dependency-path: crates/jev-app/ui/package-lock.json
 
+      # tauri-action 会执行 `npm run tauri build`: 根目录要有 tauri CLI,
+      # beforeBuildCommand 的 vite/tsc 要有 ui 依赖
+      - name: Install root deps (tauri CLI)
+        run: npm ci
+
+      - name: Install ui deps (vite/tsc)
+        working-directory: crates/jev-app/ui
+        run: npm ci
+
       # 下载 pdfium: tauri build 的 bundle.resources glob 需要该目录存在
       - name: Provision pdfium
         shell: bash
