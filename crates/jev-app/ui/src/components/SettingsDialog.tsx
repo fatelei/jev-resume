@@ -28,6 +28,15 @@ export function SettingsDialog(props: SettingsDialogProps) {
     };
   }, []);
 
+  // ESC 关闭弹窗
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") props.onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [props.onClose]);
+
   const set = <K extends keyof AppConfig>(key: K, value: AppConfig[K]) => {
     setDraft((d) => ({ ...d, [key]: value }));
   };

@@ -145,6 +145,7 @@ export default function App() {
   }, [rowsState, seniorityLabels]);
 
   const onOpenSettings = useCallback(() => setSettingsOpen(true), []);
+  const onCloseSettings = useCallback(() => setSettingsOpen(false), []);
 
   const onSettingsSaved = useCallback(() => {
     setSettingsOpen(false);
@@ -172,7 +173,7 @@ export default function App() {
       {settingsOpen && (
         <SettingsDialog
           configPath={meta?.config_path ?? null}
-          onClose={() => setSettingsOpen(false)}
+          onClose={onCloseSettings}
           onSaved={onSettingsSaved}
         />
       )}
