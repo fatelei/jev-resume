@@ -35,10 +35,14 @@ pub fn discover_pdfium_path() -> Option<std::path::PathBuf> {
             }
             // bundle.resources 的 glob 保留相对路径 pdfium/lib/：
             // Windows/Linux 资源在 exe 旁的 pdfium/lib/，macOS .app 在 ../Resources/pdfium/lib/
-            let mut candidates = vec![dir.join("pdfium").join("lib").join(name)];
-            #[cfg(target_os = "macos")]
-            candidates.push(dir.join("../Resources/pdfium/lib").join(name));
-            for p in candidates {
+            // 用 cfg! 而非 #[cfg], 保证各平台编译时 mut/分支都不产生差异
+            let rels: &[&str] = if cfg!(target_os = "macos") {
+                &["pdfium/lib", "../Resources/pdfium/lib"]
+            } else {
+                &["pdfium/lib"]
+            };
+            for rel in rels {
+                let p = dir.join(rel).join(name);
                 if p.exists() {
                     return Some(p);
                 }
