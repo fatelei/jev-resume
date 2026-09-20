@@ -7,7 +7,7 @@ mod views;
 use gpui::{
     App, AppContext as _, TitlebarOptions, Window, WindowBounds, WindowOptions, px, size,
 };
-use gpui_component::Root;
+use gpui_component::{Root, Theme, ThemeMode};
 use gpui_platform::application;
 
 use views::workspace::WorkspaceView;
@@ -15,6 +15,8 @@ use views::workspace::WorkspaceView;
 fn main() {
     application().run(|cx: &mut App| {
         gpui_component::init(cx);
+        // 明确浅色主题: 深色模式下组件白字与白色窗口底叠加会全部隐形
+        Theme::change(ThemeMode::Light, None, cx);
 
         let bounds = gpui::Bounds::centered(None, size(px(1280.), px(820.)), cx);
         let options = WindowOptions {

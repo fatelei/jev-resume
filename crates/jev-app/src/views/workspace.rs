@@ -51,10 +51,10 @@ impl WorkspaceView {
     /// 导入文件夹并启动判定批次。
     fn import_folder(&mut self, _window: &mut Window, cx: &mut Context<Self>) {
         let picker = cx.prompt_for_paths(gpui::PathPromptOptions {
-            files: false,
+            files: true,
             directories: true,
             multiple: true,
-            prompt: Some("选择简历文件夹".into()),
+            prompt: Some("选择简历文件或文件夹".into()),
         });
 
         cx.spawn(async move |this, cx| {
@@ -130,7 +130,7 @@ impl WorkspaceView {
                     .flex_1()
                     .text_size(px(13.))
                     .text_color(cx.theme().muted_foreground)
-                    .child("支持 PDF / DOCX / TXT, 批量判定结果本地缓存"),
+                    .child("支持 PDF / DOCX / TXT (单文件或整文件夹), 结果本地缓存"),
             )
     }
 
@@ -164,7 +164,7 @@ impl gpui::Render for WorkspaceView {
                         .items_center()
                         .justify_center()
                         .text_color(cx.theme().muted_foreground)
-                        .child("点击任意位置选择简历文件夹 (PDF / DOCX / TXT)"),
+                        .child("点击「导入」选择简历文件或文件夹 (支持 PDF / DOCX / TXT, 可多选)"),
                 )
             })
             .when(!empty, |this| {
