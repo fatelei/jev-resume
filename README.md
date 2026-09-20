@@ -59,7 +59,7 @@ concurrency = 4
 
 ## 安装包（GitHub Release）
 
-推送 `v*` tag（或手动 workflow_dispatch）触发三平台发布构建，产物自动挂到 GitHub Release：
+从 [GitHub Releases](https://github.com/fatelei/jev-resume/releases) 下载对应平台安装包：
 
 - macOS: `.dmg` / `.app.tar.gz`（未签名，安装后执行 `xattr -cr /Applications/jev-resume.app` 即可打开；或系统设置 → 隐私与安全性 → 仍要打开）
 - Windows: `-setup.exe` (NSIS) / `.msi`（SmartScreen 提示点「仍要运行」）
