@@ -3,12 +3,12 @@ name = "jev-app"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
-description = "回答透视镜姊妹篇: Jev 简历批量分类桌面应用 (Tauri 2)"
+description = "阅历 YueLi: Jev 简历批量分类桌面应用 (Tauri 2)"
 # bin 名与包名不同, tauri CLI 靠 default-run 定位主二进制
-default-run = "jev-resume"
+default-run = "yueli"
 
 [[bin]]
-name = "jev-resume"
+name = "yueli"
 path = "src/main.rs"
 
 [build-dependencies]

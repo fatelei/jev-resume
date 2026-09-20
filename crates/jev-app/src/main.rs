@@ -1,4 +1,4 @@
-//! jev-resume 桌面应用入口 (Tauri 2)。
+//! 阅历 YueLi 桌面应用入口 (Tauri 2)。
 
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 

@@ -1,4 +1,4 @@
-# jev-resume
+# 阅历 YueLi
 
 Jev 简历批量分类桌面工具（Windows / macOS / Linux）：导入一个文件夹的简历（PDF / DOCX / TXT，支持拖拽整文件夹进窗口），后台并发送入 TypeSafe Jev 决策模型，输出每个回答的四维判定：
 
@@ -40,9 +40,9 @@ npm run dev
 
 **推荐**：应用内点「设置」（未配置 Key 时顶部提示可直接点击）填入 TypeSafe API Key，保存即生效。也可以直接编辑配置文件：
 
-- macOS: `~/Library/Application Support/jev-resume/config.toml`
-- Windows: `%APPDATA%\jev-resume\config.toml`
-- Linux: `~/.config/jev-resume/config.toml`
+- macOS: `~/Library/Application Support/yueli/config.toml`
+- Windows: `%APPDATA%\yueli\config.toml`
+- Linux: `~/.config/yueli/config.toml`
 
 ```toml
 api_key = "apikey_..."
@@ -59,9 +59,9 @@ concurrency = 4
 
 ## 安装包（GitHub Release）
 
-从 [GitHub Releases](https://github.com/fatelei/jev-resume/releases) 下载对应平台安装包：
+从 [GitHub Releases](https://github.com/fatelei/yueli/releases) 下载对应平台安装包：
 
-- macOS: `.dmg` / `.app.tar.gz`（未签名，安装后执行 `xattr -cr /Applications/jev-resume.app` 即可打开；或系统设置 → 隐私与安全性 → 仍要打开）
+- macOS: `.dmg` / `.app.tar.gz`（未签名，安装后执行 `xattr -cr /Applications/yueli.app` 即可打开；或系统设置 → 隐私与安全性 → 仍要打开）
 - Windows: `-setup.exe` (NSIS) / `.msi`（SmartScreen 提示点「仍要运行」）
 - Linux: `.deb` / `.AppImage` / `.rpm`
 

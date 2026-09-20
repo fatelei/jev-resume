@@ -3,7 +3,7 @@ name = "jev-core"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
-description = "Jev 简历分类核心: 提取/判定/流水线/导出 (无 UI 依赖)"
+description = "阅历 YueLi 核心: 提取/判定/流水线/导出 (无 UI 依赖)"
 
 [dependencies]
 serde = { workspace = true }

@@ -1,4 +1,4 @@
-//! 应用配置：config_dir/jev-resume/config.toml（unix 0600）。
+//! 应用配置：config_dir/yueli/config.toml（unix 0600）。
 
 use std::path::PathBuf;
 
@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::error::{CoreError, CoreResult};
 
-pub const CONFIG_DIR_NAME: &str = "jev-resume";
+pub const CONFIG_DIR_NAME: &str = "yueli";
 pub const CONFIG_FILE_NAME: &str = "config.toml";
 pub const CRITERIA_FILE_NAME: &str = "criteria.toml";
 

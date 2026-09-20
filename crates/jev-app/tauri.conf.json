@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "jev-resume",
-  "version": "0.1.1",
-  "identifier": "com.jev.resume",
+  "productName": "yueli",
+  "version": "0.1.2",
+  "identifier": "com.yueli.app",
   "build": {
     "beforeDevCommand": "npm run dev --prefix crates/jev-app/ui",
     "beforeBuildCommand": "npm run build --prefix crates/jev-app/ui",
@@ -13,7 +13,7 @@
     "windows": [
       {
         "label": "main",
-        "title": "Jev 简历分类",
+        "title": "阅历 · 简历分类",
         "width": 1280,
         "height": 820,
         "minWidth": 900,

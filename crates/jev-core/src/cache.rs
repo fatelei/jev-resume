@@ -1,4 +1,4 @@
-//! 判定结果缓存：data_dir/jev-resume/results/{criteria_version}/{content_hash}.json
+//! 判定结果缓存：data_dir/yueli/results/{criteria_version}/{content_hash}.json
 //! 目录名带 criteria_version —— 改判据即整目录换位，旧缓存自然失效。
 
 use std::path::{Path, PathBuf};
@@ -30,16 +30,16 @@ pub struct CacheRecord {
 }
 
 pub const CACHE_SCHEMA: u32 = 1;
-pub const DATA_DIR_ENV: &str = "JEV_RESUME_DATA_DIR";
+pub const DATA_DIR_ENV: &str = "YUELI_DATA_DIR";
 
-/// 缓存根目录；`JEV_RESUME_DATA_DIR` 可重定向（便携部署 / 测试隔离）。
+/// 缓存根目录；`YUELI_DATA_DIR` 可重定向（便携部署 / 测试隔离）。
 pub fn cache_root() -> Option<PathBuf> {
     if let Ok(dir) = std::env::var(DATA_DIR_ENV) {
         if !dir.trim().is_empty() {
             return Some(PathBuf::from(dir).join("results"));
         }
     }
-    dirs::data_dir().map(|d| d.join("jev-resume").join("results"))
+    dirs::data_dir().map(|d| d.join("yueli").join("results"))
 }
 
 pub fn cache_dir_for(root: &Path, criteria_version: u64) -> PathBuf {

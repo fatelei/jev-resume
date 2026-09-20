@@ -90,7 +90,7 @@ fn spawn_batch(
 async fn batch_cache_concurrency_and_cancel_scenarios() {
     // 缓存根目录重定向到临时目录 —— 进程级 env, 故三个场景合并为一个测试顺序执行
     let data_dir = tempfile::tempdir().unwrap();
-    std::env::set_var("JEV_RESUME_DATA_DIR", data_dir.path());
+    std::env::set_var(jev_core::cache::DATA_DIR_ENV, data_dir.path());
 
     let server = MockServer::start().await;
     let counting = Counting {
