@@ -13,13 +13,19 @@ case "$(uname -s)-$(uname -m)" in
   Darwin-x86_64) ASSET="pdfium-mac-x64.tgz" ;;
   Linux-x86_64) ASSET="pdfium-linux-x64.tgz" ;;
   Linux-aarch64) ASSET="pdfium-linux-arm64.tgz" ;;
-  MINGW*|MSYS*|Windows_NT) ASSET="pdfium-win-x64.zip" ;;
+  MINGW*|MSYS*|Windows_NT) ASSET="pdfium-win-x64.tgz" ;;
   *) echo "不支持的平台: $(uname -s)-$(uname -m)"; exit 1 ;;
 esac
 
 URL="https://github.com/bblanchon/pdfium-binaries/releases/download/chromium/$VERSION/$ASSET"
 echo "下载 $URL"
 curl -sL "$URL" -o "$OUT/$ASSET"
+
+# 上游对失效 URL 返回 404 HTML 而非报错, 校验 gzip 魔数及早失败
+if [ "$(head -c 2 "$OUT/$ASSET" | od -An -tx1 | tr -d ' \n')" != "1f8b" ]; then
+  echo "下载内容不是 gzip (上游资产可能已改名/删除): $URL" >&2
+  exit 1
+fi
 
 case "$ASSET" in
   *.tgz) tar -xzf "$OUT/$ASSET" -C "$OUT" ;;
