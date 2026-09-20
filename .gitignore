@@ -4,4 +4,5 @@ vendor/pdfium/
 .DS_Store
 node_modules/
 crates/jev-app/ui/dist/
+crates/jev-app/pdfium/
 gen/

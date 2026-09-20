@@ -27,11 +27,13 @@ case "$ASSET" in
 esac
 rm -f "$OUT/$ASSET"
 
-# 把动态库直接放到二进制旁边（发现链第二优先级），跑应用无需 export 环境变量
+# 把动态库直接放到二进制旁边（发现链第二优先级），跑应用无需 export 环境变量；
+# 同时放进 crates/jev-app/pdfium/lib/ 供 tauri bundle.resources 打包
 LIB="$(ls "$OUT/lib/" | grep -E 'pdfium' | head -1)"
-mkdir -p "$ROOT/target/debug" "$ROOT/target/release"
+mkdir -p "$ROOT/target/debug" "$ROOT/target/release" "$ROOT/crates/jev-app/pdfium/lib"
 cp "$OUT/lib/$LIB" "$ROOT/target/debug/"
 cp "$OUT/lib/$LIB" "$ROOT/target/release/"
+cp "$OUT/lib/$LIB" "$ROOT/crates/jev-app/pdfium/lib/"
 
 echo "pdfium 已就绪: $OUT/lib/"
 ls "$OUT/lib/"

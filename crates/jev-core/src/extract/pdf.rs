@@ -18,7 +18,7 @@ fn lib_file_name() -> &'static str {
 }
 
 /// 发现 pdfium 动态库路径；找不到返回 None（调用方决定报错或跳过）。
-/// 顺序：环境变量 → 二进制旁边 → macOS 安装包 Resources（tauri bundle）→ 系统。
+/// 顺序：环境变量 → 二进制旁边 → 安装包 resources（tauri bundle）→ 系统。
 pub fn discover_pdfium_path() -> Option<std::path::PathBuf> {
     if let Ok(env_path) = std::env::var("PDFIUM_DYNAMIC_LIB_PATH") {
         let p = std::path::PathBuf::from(env_path);
@@ -28,17 +28,17 @@ pub fn discover_pdfium_path() -> Option<std::path::PathBuf> {
     }
     if let Ok(exe) = std::env::current_exe() {
         if let Some(dir) = exe.parent() {
-            let p = dir.join(lib_file_name());
+            let name = lib_file_name();
+            let p = dir.join(name);
             if p.exists() {
                 return Some(p);
             }
-            // macOS .app: exe 在 Contents/MacOS/，tauri resources 在 Contents/Resources/
-            // bundle.resources 的 glob 保留相对路径 pdfium/lib/
-            for rel in [
-                "../Resources/libpdfium.dylib",
-                "../Resources/pdfium/lib/libpdfium.dylib",
-            ] {
-                let p = dir.join(rel);
+            // bundle.resources 的 glob 保留相对路径 pdfium/lib/：
+            // Windows/Linux 资源在 exe 旁的 pdfium/lib/，macOS .app 在 ../Resources/pdfium/lib/
+            let mut candidates = vec![dir.join("pdfium").join("lib").join(name)];
+            #[cfg(target_os = "macos")]
+            candidates.push(dir.join("../Resources/pdfium/lib").join(name));
+            for p in candidates {
                 if p.exists() {
                     return Some(p);
                 }
