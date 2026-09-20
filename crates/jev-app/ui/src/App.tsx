@@ -26,11 +26,13 @@ import {
 import { Toolbar } from "./components/Toolbar";
 import { ResultsTable } from "./components/ResultsTable";
 import { StatusBar } from "./components/StatusBar";
+import { SettingsDialog } from "./components/SettingsDialog";
 
 export default function App() {
   const [rowsState, dispatch] = useReducer(rowsReducer, emptyRows);
   const [meta, setMeta] = useState<Meta | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   const seniorityLabels = useMemo(() => {
     const map: Record<string, string> = {};
@@ -142,6 +144,16 @@ export default function App() {
     }
   }, [rowsState, seniorityLabels]);
 
+  const onOpenSettings = useCallback(() => setSettingsOpen(true), []);
+
+  const onSettingsSaved = useCallback(() => {
+    setSettingsOpen(false);
+    setNotice("配置已保存，下一批次生效");
+    getMeta()
+      .then(setMeta)
+      .catch((e) => setNotice(`刷新配置状态失败: ${String(e)}`));
+  }, []);
+
   const done = countByState(rowsState, "done");
 
   return (
@@ -155,7 +167,15 @@ export default function App() {
         onPickFolder={onPickFolder}
         onCancel={onCancel}
         onExport={onExport}
+        onOpenSettings={onOpenSettings}
       />
+      {settingsOpen && (
+        <SettingsDialog
+          configPath={meta?.config_path ?? null}
+          onClose={() => setSettingsOpen(false)}
+          onSaved={onSettingsSaved}
+        />
+      )}
       {rowsState.order.length === 0 ? (
         <div className="empty-hint">
           点击「导入文件 / 导入文件夹」，或直接把简历拖进窗口

@@ -1,4 +1,4 @@
-//! 工具栏：导入（文件/文件夹）、取消、导出、无 Key 提示。
+//! 工具栏：导入（文件/文件夹）、取消、导出、设置、无 Key 提示。
 
 interface ToolbarProps {
   running: boolean;
@@ -9,6 +9,7 @@ interface ToolbarProps {
   onPickFolder: () => void;
   onCancel: () => void;
   onExport: () => void;
+  onOpenSettings: () => void;
 }
 
 export function Toolbar(props: ToolbarProps) {
@@ -26,13 +27,24 @@ export function Toolbar(props: ToolbarProps) {
       <button className="btn" onClick={props.onExport} disabled={!props.canExport}>
         导出
       </button>
+      <button
+        className={`btn ${props.hasApiKey ? "" : "warn"}`}
+        onClick={props.onOpenSettings}
+        title="配置 API Key"
+      >
+        设置{props.hasApiKey ? "" : " (未配置 Key)"}
+      </button>
       <div className="toolbar-hint">
         支持 PDF / DOCX / TXT（单文件或整文件夹），结果本地缓存
       </div>
       {!props.hasApiKey && (
-        <div className="key-warning" title={props.configPath ?? ""}>
-          未配置 API Key，请编辑 {props.configPath ?? "配置文件"}
-        </div>
+        <button
+          className="key-warning"
+          onClick={props.onOpenSettings}
+          title={props.configPath ?? ""}
+        >
+          未配置 API Key，点击设置
+        </button>
       )}
     </div>
   );

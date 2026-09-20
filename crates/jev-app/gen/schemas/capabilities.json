@@ -1,1 +1,0 @@
-{"default":{"identifier":"default","description":"主窗口能力: 事件 + 对话框","local":true,"windows":["main"],"permissions":["core:default","dialog:default"]}}

@@ -36,6 +36,18 @@ pub fn get_meta() -> Meta {
     }
 }
 
+/// 读取应用配置（api_key 等），供设置页回填。
+#[tauri::command(async)]
+pub fn get_config() -> Result<jev_core::config::AppConfig, String> {
+    jev_core::config::load().map_err(|e| e.user_message())
+}
+
+/// 保存应用配置（unix 0600 原子写）。保存后下一批次即生效。
+#[tauri::command(async)]
+pub fn save_config(config: jev_core::config::AppConfig) -> Result<(), String> {
+    jev_core::config::save(&config).map_err(|e| e.user_message())
+}
+
 /// 拖拽/文件夹路径 → 展开为简历文件列表（walkdir，pdf/docx/txt）。
 #[tauri::command(async)]
 pub fn collect_files(paths: Vec<String>) -> Result<Vec<String>, String> {

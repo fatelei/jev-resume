@@ -12,6 +12,26 @@ export interface Meta {
   has_api_key: boolean;
 }
 
+/** 应用配置（对齐 jev-core config::AppConfig） */
+export interface AppConfig {
+  api_key: string;
+  base_url: string;
+  model: string;
+  concurrency: number;
+}
+
+export const defaultConfig = (): AppConfig => ({
+  api_key: "",
+  base_url: "https://api.typesafe.ai",
+  model: "jev-latest",
+  concurrency: 4,
+});
+
+export const getConfig = () => invoke<AppConfig>("get_config");
+
+export const saveConfig = (config: AppConfig) =>
+  invoke<void>("save_config", { config });
+
 /** 导出行（对齐 jev-core export::ExportRow 的 serde 字段名） */
 export interface ExportRowInput {
   file_name: string;

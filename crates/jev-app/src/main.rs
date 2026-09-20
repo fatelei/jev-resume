@@ -21,6 +21,8 @@ fn main() {
         .manage(PipelineState::default())
         .invoke_handler(tauri::generate_handler![
             commands::get_meta,
+            commands::get_config,
+            commands::save_config,
             commands::collect_files,
             commands::start_batch,
             commands::cancel_batch,
