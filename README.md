@@ -65,7 +65,7 @@ concurrency = 4
 - Windows: `-setup.exe` (NSIS) / `.msi`
 - Linux: `.deb` / `.AppImage` / `.rpm`
 
-pdfium 动态库已打入安装包（`bundle.resources`），安装后无需任何环境变量。
+pdfium 动态库已通过 `bundle.resources` 打入安装包，macOS / Windows / AppImage 开箱即用；`.deb` 如提示找不到 pdfium，设置环境变量 `PDFIUM_DYNAMIC_LIB_PATH` 指向系统 pdfium 即可。
 
 ## License
 
