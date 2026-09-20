@@ -24,9 +24,8 @@ Jev 简历批量分类桌面工具（Windows / macOS / Linux）：导入一个�
 # 1. Rust 1.98.1（rust-toolchain.toml 已钉住）与 Node 20+
 rustup toolchain install 1.98.1
 
-# 2. pdfium 动态库
+# 2. pdfium 动态库（脚本会放到 vendor/ 与 target/{debug,release}/ 旁，无需环境变量）
 ./scripts/fetch-pdfium.sh
-export PDFIUM_DYNAMIC_LIB_PATH="$PWD/vendor/pdfium/lib/libpdfium.dylib"
 
 # 3. 测试核心与前端
 cargo test -p jev-core

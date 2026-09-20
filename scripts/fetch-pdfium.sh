@@ -27,6 +27,12 @@ case "$ASSET" in
 esac
 rm -f "$OUT/$ASSET"
 
+# 把动态库直接放到二进制旁边（发现链第二优先级），跑应用无需 export 环境变量
+LIB="$(ls "$OUT/lib/" | grep -E 'pdfium' | head -1)"
+mkdir -p "$ROOT/target/debug" "$ROOT/target/release"
+cp "$OUT/lib/$LIB" "$ROOT/target/debug/"
+cp "$OUT/lib/$LIB" "$ROOT/target/release/"
+
 echo "pdfium 已就绪: $OUT/lib/"
 ls "$OUT/lib/"
-echo "导出: export PDFIUM_DYNAMIC_LIB_PATH=$OUT/lib/$(ls "$OUT/lib/" | grep -E 'pdfium' | head -1)"
+echo "已复制到 target/debug 与 target/release (应用自动发现, 无需环境变量)"
