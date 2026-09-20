@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "tauri dev",
     "build": "tauri build",
-    "test": "npm test --prefix crates/jev-app/ui"
+    "test": "npm test --prefix crates/jev-app/ui",
+    "tauri": "tauri"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2.11.5"
