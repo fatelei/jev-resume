@@ -48,14 +48,15 @@ impl Criteria {
     }
 
     pub fn parse_toml(toml_str: &str) -> CoreResult<Self> {
-        let criteria: Criteria =
-            toml::from_str(toml_str).map_err(|e| CoreError::DocxMalformed(format!("判据 TOML: {e}")))?;
+        let criteria: Criteria = toml::from_str(toml_str)
+            .map_err(|e| CoreError::DocxMalformed(format!("判据 TOML: {e}")))?;
         criteria.validate()?;
         Ok(criteria)
     }
 
     pub fn to_toml(&self) -> CoreResult<String> {
-        toml::to_string_pretty(self).map_err(|e| CoreError::DocxMalformed(format!("判据序列化: {e}")))
+        toml::to_string_pretty(self)
+            .map_err(|e| CoreError::DocxMalformed(format!("判据序列化: {e}")))
     }
 
     pub fn validate(&self) -> CoreResult<()> {
@@ -68,7 +69,10 @@ impl Criteria {
                 return Err(CoreError::DocxMalformed("分类 key 不能为空".into()));
             }
             if !seen.insert(cat.key.clone()) {
-                return Err(CoreError::DocxMalformed(format!("重复的分类 key: {}", cat.key)));
+                return Err(CoreError::DocxMalformed(format!(
+                    "重复的分类 key: {}",
+                    cat.key
+                )));
             }
         }
         Ok(())
@@ -122,7 +126,12 @@ impl Criteria {
 
 impl fmt::Display for Criteria {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "Criteria v{} ({} 类)", self.meta.version, self.categories.len())
+        write!(
+            f,
+            "Criteria v{} ({} 类)",
+            self.meta.version,
+            self.categories.len()
+        )
     }
 }
 
@@ -198,7 +207,10 @@ description = "d"
 
         // 外部手改：绕过 save 直接写文件
         let mut raw = std::fs::read_to_string(&path).unwrap();
-        raw = raw.replace("extra_instructions = \"\"", "extra_instructions = \"侧重 rust\"");
+        raw = raw.replace(
+            "extra_instructions = \"\"",
+            "extra_instructions = \"侧重 rust\"",
+        );
         std::fs::write(&path, &raw).unwrap();
 
         let reloaded = Criteria::load(&path).unwrap();

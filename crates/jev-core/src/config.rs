@@ -106,9 +106,7 @@ pub fn ensure_criteria_file(default_toml: &str) -> CoreResult<Option<PathBuf>> {
 
 pub fn save(config: &AppConfig) -> CoreResult<()> {
     let Some(path) = config_path() else {
-        return Err(CoreError::NotConfigured(
-            "无法定位用户配置目录".into(),
-        ));
+        return Err(CoreError::NotConfigured("无法定位用户配置目录".into()));
     };
     if let Some(parent) = path.parent() {
         std::fs::create_dir_all(parent)?;
@@ -137,8 +135,7 @@ mod tests {
 
     #[test]
     fn partial_toml_uses_defaults() {
-        let c2: AppConfig =
-            toml::from_str("api_key = \"k\"\nconcurrency = 2\n").unwrap();
+        let c2: AppConfig = toml::from_str("api_key = \"k\"\nconcurrency = 2\n").unwrap();
         assert_eq!(c2.model, "jev-latest");
         assert_eq!(c2.concurrency, 2);
     }

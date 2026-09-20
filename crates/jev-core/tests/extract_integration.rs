@@ -43,11 +43,16 @@ fn build_minimal_pdf(text: &str) -> Vec<u8> {
     }
     // content stream (object 4)
     offsets[3] = out.len();
-    let stream_obj = format!("4 0 obj\n<< /Length {} >>\nstream\n{content}\nendstream\nendobj\n", content.len());
+    let stream_obj = format!(
+        "4 0 obj\n<< /Length {} >>\nstream\n{content}\nendstream\nendobj\n",
+        content.len()
+    );
     out.extend_from_slice(stream_obj.as_bytes());
     // font (object 5)
     offsets[4] = out.len();
-    out.extend_from_slice(b"5 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n");
+    out.extend_from_slice(
+        b"5 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n",
+    );
 
     let start_xref = out.len();
     out.extend_from_slice(format!("xref\n0 6\n0000000000 65535 f \n").as_bytes());
@@ -117,7 +122,10 @@ fn pdf_extracts_text_when_pdfium_available() {
         eprintln!("跳过: 本地无 pdfium 动态库 (CI 会硬性执行)");
         return;
     }
-    let pdf_bytes = build_minimal_pdf("Backend engineer with 5 years of experience");
+    // 文本须超过 extract/pdf.rs 的 50 字无文本层阈值
+    let pdf_bytes = build_minimal_pdf(
+        "Backend engineer with 5 years of experience in distributed systems and high-throughput services",
+    );
     let extracted = extract_bytes(Format::Pdf, &pdf_bytes).unwrap();
     assert!(extracted.text.contains("Backend engineer"));
     assert_eq!(extracted.page_count, Some(1));

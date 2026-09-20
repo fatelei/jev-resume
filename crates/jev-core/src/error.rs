@@ -54,9 +54,7 @@ impl CoreError {
     pub fn retryable(&self) -> bool {
         match self {
             CoreError::JevNetwork(_) => true,
-            CoreError::JevHttp { status, .. } => {
-                *status == 429 || (500..600).contains(status)
-            }
+            CoreError::JevHttp { status, .. } => *status == 429 || (500..600).contains(status),
             _ => false,
         }
     }
@@ -66,9 +64,7 @@ impl CoreError {
         match self {
             CoreError::UnsupportedFormat(f) => format!("不支持的格式: {f}"),
             CoreError::Io(e) => format!("文件读取失败: {e}"),
-            CoreError::PdfBind(_) => {
-                "未找到 pdfium 动态库, 见 README 安装说明".into()
-            }
+            CoreError::PdfBind(_) => "未找到 pdfium 动态库, 见 README 安装说明".into(),
             CoreError::PdfLoad(e) => format!("PDF 打开失败(可能加密): {e}"),
             CoreError::NoTextLayer => "疑似扫描件, 无文本层".into(),
             CoreError::DocxMalformed(e) => format!("DOCX 解析失败: {e}"),

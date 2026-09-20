@@ -1,0 +1,190 @@
+/* 浅色主题 + 系统字体（WebView 原生文字渲染，无需内嵌字体） */
+
+:root {
+  --border: #e2e5ea;
+  --muted: #6b7280;
+  --text: #1f2328;
+  --accent: #2563eb;
+  --danger: #dc2626;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+  font-size: 13px;
+  color: var(--text);
+  background: #fff;
+}
+
+.app {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── 工具栏 ── */
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.btn {
+  padding: 5px 14px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--text);
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn:hover:not(:disabled) {
+  background: #f5f6f8;
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.btn.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.btn.primary:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+
+.btn.danger {
+  color: var(--danger);
+}
+
+.toolbar-hint {
+  flex: 1;
+  color: var(--muted);
+}
+
+.key-warning {
+  color: var(--danger);
+  max-width: 46%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── 空态 ── */
+
+.empty-hint {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  padding: 0 40px;
+  text-align: center;
+}
+
+/* ── 结果表 ── */
+
+.table-wrap {
+  flex: 1;
+  overflow: auto;
+}
+
+table.results {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table.results th,
+table.results td {
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  white-space: nowrap;
+}
+
+table.results thead th {
+  position: sticky;
+  top: 0;
+  background: #fafbfc;
+  border-bottom: 1px solid #d6d9de;
+  font-weight: 600;
+}
+
+table.results td.num,
+table.results th.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+td.ellipsis {
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+td.note {
+  color: var(--danger);
+}
+
+.status.done {
+  color: #16a34a;
+}
+
+.status.failed {
+  color: var(--danger);
+}
+
+.status.extracting,
+.status.queued,
+.status.judging {
+  color: #b45309;
+}
+
+.status.pending {
+  color: var(--muted);
+}
+
+/* ── 状态栏 ── */
+
+.statusbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 4px 12px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.statusbar .notice {
+  color: var(--danger);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.statusbar .log {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

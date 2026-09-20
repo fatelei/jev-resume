@@ -91,11 +91,9 @@ impl JevClient {
                 }
                 Err(err) => {
                     let is_last = attempt + 1 >= max;
-                    let retryable = matches!(
-                        &err,
-                        CoreError::JevNetwork(_)
-                            | CoreError::JevHttp { .. }
-                    ) && err.retryable();
+                    let retryable =
+                        matches!(&err, CoreError::JevNetwork(_) | CoreError::JevHttp { .. })
+                            && err.retryable();
                     if !retryable || is_last {
                         if retryable {
                             return Err(CoreError::JevRetriesExhausted);

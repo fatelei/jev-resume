@@ -72,7 +72,10 @@ fn spawn_batch(
     config: PipelineConfig,
     files: Vec<std::path::PathBuf>,
     criteria: Criteria,
-) -> (async_channel::Receiver<PipelineEvent>, tokio_util::sync::CancellationToken) {
+) -> (
+    async_channel::Receiver<PipelineEvent>,
+    tokio_util::sync::CancellationToken,
+) {
     let (tx, rx) = async_channel::bounded(256);
     let (token_tx, token_rx) = std::sync::mpsc::channel();
     std::thread::spawn(move || {
@@ -107,7 +110,13 @@ async fn batch_cache_concurrency_and_cancel_scenarios() {
 
     // ── 场景1: 5 文件首批全 Fresh ──
     let files: Vec<_> = (0..5)
-        .map(|i| write_resume(dir.path(), &format!("简历{i}.txt"), &format!("候选人{i} 五年后端经验 Rust")))
+        .map(|i| {
+            write_resume(
+                dir.path(),
+                &format!("简历{i}.txt"),
+                &format!("候选人{i} 五年后端经验 Rust"),
+            )
+        })
         .collect();
     let (rx, _token) = spawn_batch(
         PipelineConfig {
@@ -155,7 +164,13 @@ async fn batch_cache_concurrency_and_cancel_scenarios() {
         .mount(&server)
         .await;
     let files: Vec<_> = (0..8)
-        .map(|i| write_resume(dir.path(), &format!("并发{i}.txt"), &format!("并发内容{i} 前端 Vue")))
+        .map(|i| {
+            write_resume(
+                dir.path(),
+                &format!("并发{i}.txt"),
+                &format!("并发内容{i} 前端 Vue"),
+            )
+        })
         .collect();
     let (rx, _token) = spawn_batch(
         PipelineConfig {
@@ -186,7 +201,13 @@ async fn batch_cache_concurrency_and_cancel_scenarios() {
         .mount(&server)
         .await;
     let files: Vec<_> = (0..10)
-        .map(|i| write_resume(dir.path(), &format!("取消{i}.txt"), &format!("取消内容{i} 算法 深度学习")))
+        .map(|i| {
+            write_resume(
+                dir.path(),
+                &format!("取消{i}.txt"),
+                &format!("取消内容{i} 算法 深度学习"),
+            )
+        })
         .collect();
     let (rx, token) = spawn_batch(
         PipelineConfig {

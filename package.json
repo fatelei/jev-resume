@@ -1,0 +1,13 @@
+{
+  "name": "jev-resume",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "tauri dev",
+    "build": "tauri build",
+    "test": "npm test --prefix crates/jev-app/ui"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.11.5"
+  }
+}

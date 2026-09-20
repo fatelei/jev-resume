@@ -3,20 +3,24 @@ name = "jev-app"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
-description = "回答透视镜姊妹篇: Jev 简历批量分类桌面应用 (GPUI)"
+description = "回答透视镜姊妹篇: Jev 简历批量分类桌面应用 (Tauri 2)"
+# bin 名与包名不同, tauri CLI 靠 default-run 定位主二进制
+default-run = "jev-resume"
 
 [[bin]]
 name = "jev-resume"
 path = "src/main.rs"
 
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
 [dependencies]
 jev-core = { path = "../jev-core" }
+tauri = { version = "2", features = [] }
+tauri-plugin-dialog = "2"
+# run_batch 的事件通道类型; CancellationToken 存入应用状态
 async-channel = "2"
-futures = "0.3"
+tokio-util = "0.7"
 serde = { workspace = true }
 serde_json = { workspace = true }
 anyhow = { workspace = true }
-# 必须与 gpui-component 内部使用同一份 gpui (gpui-pre 0.3.5 改名), 否则类型冲突
-gpui = { version = "0.3.5", package = "gpui-pre" }
-gpui-component = "=0.6.4"
-gpui-platform = { version = "0.3.5", package = "gpui-pre-platform" }

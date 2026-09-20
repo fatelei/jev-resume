@@ -3,7 +3,7 @@
 //! 内部独占一个 tokio Runtime；跨边界全是纯数据事件（async-channel）。
 //! 并发由 Semaphore 控制（默认 4）；批次级 CancellationToken 支持中途取消。
 
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::sync::Arc;
 use std::time::Instant;
 
@@ -11,7 +11,7 @@ use serde::{Deserialize, Serialize};
 use tokio::sync::Semaphore;
 use tokio_util::sync::CancellationToken;
 
-use crate::cache::{self, CacheRecord, CacheFileInfo};
+use crate::cache::{self, CacheFileInfo, CacheRecord};
 use crate::criteria::Criteria;
 use crate::error::{CoreError, CoreResult};
 use crate::extract::{self, Extracted};
@@ -46,7 +46,9 @@ pub struct FileJudgment {
 
 #[derive(Debug, Clone, Serialize)]
 pub enum PipelineEvent {
-    BatchStarted { total: usize },
+    BatchStarted {
+        total: usize,
+    },
     FileUpdated(Box<FileUpdate>),
     BatchFinished {
         done: usize,
@@ -68,9 +70,9 @@ pub struct FileUpdate {
 }
 
 impl FileUpdate {
-    fn transition(path: &PathBuf, state: FileState) -> Self {
+    fn transition(path: &Path, state: FileState) -> Self {
         Self {
-            path: path.clone(),
+            path: path.to_path_buf(),
             state,
             judgment: None,
             error: None,
@@ -272,8 +274,8 @@ async fn process_file(
         &crate::hash::sha256_hex(&file_bytes),
     ]);
 
-    let cache_dir: Option<PathBuf> = cache::cache_root()
-        .map(|root| cache::cache_dir_for(&root, criteria.version()));
+    let cache_dir: Option<PathBuf> =
+        cache::cache_root().map(|root| cache::cache_dir_for(&root, criteria.version()));
     if let Some(dir) = &cache_dir {
         match cache::get(dir, &content_hash) {
             Ok(Some(record)) => {

@@ -38,14 +38,21 @@ pub fn build_state(input: &StateInput<'_>, criteria: &Criteria) -> String {
         format!(
             "提取字数: {} (提取完整度: {})",
             e.text.chars().count(),
-            if e.text.trim().is_empty() { "空" } else { "完整" }
+            if e.text.trim().is_empty() {
+                "空"
+            } else {
+                "完整"
+            }
         ),
     ];
     for warning in &e.warnings {
         sections.push(format!("[注意] {warning}"));
     }
     if !criteria.state.extra_instructions.trim().is_empty() {
-        sections.push(format!("[hint] {}", criteria.state.extra_instructions.trim()));
+        sections.push(format!(
+            "[hint] {}",
+            criteria.state.extra_instructions.trim()
+        ));
     }
     sections.push("[正文]".into());
     sections.push(truncate_body(&e.text));

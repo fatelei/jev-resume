@@ -105,7 +105,10 @@ pub fn collect_resume_files(paths: &[std::path::PathBuf]) -> CoreResult<Vec<std:
             }
             continue;
         }
-        for entry in walkdir::WalkDir::new(path).into_iter().filter_map(|e| e.ok()) {
+        for entry in walkdir::WalkDir::new(path)
+            .into_iter()
+            .filter_map(|e| e.ok())
+        {
             if !entry.file_type().is_file() {
                 continue;
             }

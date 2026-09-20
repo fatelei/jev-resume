@@ -66,8 +66,7 @@ pub fn get(dir: &Path, content_hash: &str) -> CoreResult<Option<CacheRecord>> {
 pub fn put(dir: &Path, record: &CacheRecord) -> CoreResult<()> {
     std::fs::create_dir_all(dir)?;
     let path = record_path(dir, &record.content_hash);
-    let raw = serde_json::to_string_pretty(record)
-        .map_err(|e| CoreError::Cache(e.to_string()))?;
+    let raw = serde_json::to_string_pretty(record).map_err(|e| CoreError::Cache(e.to_string()))?;
     let tmp = path.with_extension("json.tmp");
     std::fs::write(&tmp, raw)?;
     std::fs::rename(&tmp, &path)?;

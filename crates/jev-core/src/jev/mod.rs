@@ -104,7 +104,9 @@ pub(crate) fn parse_response(payload: &Value, body: &str) -> CoreResult<JevResul
     let answers_raw = payload
         .get("answers")
         .and_then(|a| a.as_object())
-        .ok_or_else(|| CoreError::JevBadResponse(format!("Jev 响应缺少 answers: {}", excerpt(body))))?;
+        .ok_or_else(|| {
+            CoreError::JevBadResponse(format!("Jev 响应缺少 answers: {}", excerpt(body)))
+        })?;
     if answers_raw.is_empty() {
         return Err(CoreError::JevBadResponse(format!(
             "Jev 响应缺少 answers: {}",
