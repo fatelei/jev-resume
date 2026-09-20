@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; }
+  body { width: 1024px; height: 1024px; overflow: hidden; background: transparent; }
+  .canvas {
+    position: relative; width: 1024px; height: 1024px;
+    background: linear-gradient(160deg, #3b82f6 0%, #2563eb 45%, #1e3a8a 100%);
+    border-radius: 185px;
+  }
+  /* 背景微光 */
+  .glow {
+    position: absolute; width: 720px; height: 720px; left: -180px; top: -180px;
+    background: radial-gradient(circle, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0) 65%);
+  }
+  /* 简历纸 */
+  .sheet {
+    position: absolute; left: 262px; top: 172px; width: 500px; height: 680px;
+    background: #ffffff;
+    border-radius: 36px;
+    box-shadow: 0 28px 60px rgba(15, 23, 42, 0.38);
+    padding: 64px 56px;
+    box-sizing: border-box;
+  }
+  /* 折角 */
+  .fold {
+    position: absolute; right: 0; top: 0; width: 110px; height: 110px;
+    background: linear-gradient(225deg, #dbeafe 50%, #eff6ff 50%);
+    border-radius: 0 36px 0 28px;
+  }
+  .name {
+    width: 240px; height: 44px; border-radius: 12px;
+    background: #1e293b; margin-bottom: 36px;
+  }
+  .line {
+    height: 20px; border-radius: 10px; background: #cbd5e1; margin-bottom: 26px;
+  }
+  .line.w80 { width: 80%; }
+  .line.w90 { width: 90%; }
+  .line.w70 { width: 70%; }
+  .gap { height: 26px; }
+  /* 四维判定条 */
+  .dims { position: absolute; left: 56px; bottom: 56px; width: 388px; }
+  .dim { display: flex; align-items: center; margin-bottom: 22px; }
+  .dot { width: 30px; height: 30px; border-radius: 9px; margin-right: 20px; }
+  .bar { height: 22px; border-radius: 11px; }
+  .d1 .dot { background: #2563eb; } .d1 .bar { width: 250px; background: #93c5fd; }
+  .d2 .dot { background: #0d9488; } .d2 .bar { width: 200px; background: #5eead4; }
+  .d3 .dot { background: #d97706; } .d3 .bar { width: 150px; background: #fcd34d; }
+  .d4 .dot { background: #dc2626; } .d4 .bar { width: 90px;  background: #fca5a5; }
+  .dim:last-child { margin-bottom: 0; }
+</style>
+</head>
+<body>
+  <div class="canvas">
+    <div class="glow"></div>
+    <div class="sheet">
+      <div class="fold"></div>
+      <div class="name"></div>
+      <div class="line w80"></div>
+      <div class="line w90"></div>
+      <div class="line w70"></div>
+      <div class="gap"></div>
+      <div class="line w90"></div>
+      <div class="line w80"></div>
+      <div class="dims">
+        <div class="dim d1"><div class="dot"></div><div class="bar"></div></div>
+        <div class="dim d2"><div class="dot"></div><div class="bar"></div></div>
+        <div class="dim d3"><div class="dot"></div><div class="bar"></div></div>
+        <div class="dim d4"><div class="dot"></div><div class="bar"></div></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
