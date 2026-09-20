@@ -1,15 +1,33 @@
-//! 结果表：9 列，与旧版 GPUI 表格一致。
+//! 结果表：9 列（对齐旧版 GPUI 表格），带分页（每页 100 行）。
 
-import type { RowsState } from "../rows";
+import { useEffect, useState } from "react";
+
+import type { Row, RowsState } from "../rows";
 import { STATUS_TEXT, seniorityDisplay } from "../rows";
+
+const PAGE_SIZE = 100;
 
 interface ResultsTableProps {
   state: RowsState;
+  /** 已经过搜索/状态筛选的行（保持插入序） */
+  rows: Row[];
+  /** 筛选条件变化时重置回第一页 */
+  filterKey: string;
   seniorityLabels: Readonly<Record<string, string>>;
 }
 
-export function ResultsTable({ state, seniorityLabels }: ResultsTableProps) {
-  const rows = state.order.map((p) => state.byPath[p]);
+export function ResultsTable({ rows, filterKey, seniorityLabels }: ResultsTableProps) {
+  const [page, setPage] = useState(0);
+  const pageCount = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
+  const safePage = Math.min(page, pageCount - 1);
+
+  // 筛选/搜索/清空后回到第一页
+  useEffect(() => {
+    setPage(0);
+  }, [filterKey]);
+
+  const slice = rows.slice(safePage * PAGE_SIZE, (safePage + 1) * PAGE_SIZE);
+
   return (
     <div className="table-wrap">
       <table className="results">
@@ -27,7 +45,7 @@ export function ResultsTable({ state, seniorityLabels }: ResultsTableProps) {
           </tr>
         </thead>
         <tbody>
-          {rows.map((row) => (
+          {slice.map((row) => (
             <tr key={row.path}>
               <td className="ellipsis" title={row.path}>{row.file_name}</td>
               <td>
@@ -42,8 +60,30 @@ export function ResultsTable({ state, seniorityLabels }: ResultsTableProps) {
               <td className="ellipsis note" title={row.error ?? ""}>{row.error ?? ""}</td>
             </tr>
           ))}
+          {slice.length === 0 && (
+            <tr>
+              <td colSpan={9} className="no-match">没有匹配的行</td>
+            </tr>
+          )}
         </tbody>
       </table>
+      {rows.length > PAGE_SIZE && (
+        <div className="pager">
+          <span>
+            共 {rows.length} 行 · 第 {safePage + 1}/{pageCount} 页
+          </span>
+          <button className="btn tiny" disabled={safePage === 0} onClick={() => setPage(safePage - 1)}>
+            上一页
+          </button>
+          <button
+            className="btn tiny"
+            disabled={safePage >= pageCount - 1}
+            onClick={() => setPage(safePage + 1)}
+          >
+            下一页
+          </button>
+        </div>
+      )}
     </div>
   );
 }

@@ -7,6 +7,7 @@ import {
   countByState,
   countCached,
   emptyRows,
+  filterRows,
   rowsReducer,
   seniorityDisplay,
   type RowsState,
@@ -140,5 +141,68 @@ describe("seniorityDisplay", () => {
     expect(seniorityDisplay("mid_3_5", labels)).toBe("中级 (3-5年)");
     expect(seniorityDisplay("unknown_key", labels)).toBe("unknown_key");
     expect(seniorityDisplay(null, labels)).toBe("-");
+  });
+});
+
+describe("filterRows", () => {
+  function seeded(): RowsState {
+    return reduceAll(emptyRows, [
+      {
+        FileUpdated: {
+          path: "/r/王蓓_backend.pdf",
+          state: "done",
+          judgment: null,
+          error: null,
+          elapsed_ms: 100,
+          cached: false,
+        },
+      },
+      {
+        FileUpdated: {
+          path: "/r/角权_实习.docx",
+          state: "failed",
+          judgment: null,
+          error: "无文本层",
+          elapsed_ms: null,
+          cached: false,
+        },
+      },
+      {
+        FileUpdated: {
+          path: "/r/李四_backend.txt",
+          state: "judging",
+          judgment: null,
+          error: null,
+          elapsed_ms: null,
+          cached: false,
+        },
+      },
+    ]);
+  }
+
+  it("无条件返回全部行（插入序）", () => {
+    expect(filterRows(seeded(), "", "all").map((r) => r.file_name)).toEqual([
+      "王蓓_backend.pdf",
+      "角权_实习.docx",
+      "李四_backend.txt",
+    ]);
+  });
+
+  it("按文件名关键字过滤（大小写不敏感）", () => {
+    expect(filterRows(seeded(), "BACKEND", "all").length).toBe(2);
+    expect(filterRows(seeded(), "王蓓", "all").length).toBe(1);
+    expect(filterRows(seeded(), "不存在", "all").length).toBe(0);
+  });
+
+  it("按状态筛选：done/failed/running", () => {
+    expect(filterRows(seeded(), "", "done").map((r) => r.state)).toEqual(["done"]);
+    expect(filterRows(seeded(), "", "failed").map((r) => r.state)).toEqual(["failed"]);
+    // 进行中 = pending/extracting/queued/judging
+    expect(filterRows(seeded(), "", "running").map((r) => r.state)).toEqual(["judging"]);
+  });
+
+  it("关键字与状态叠加过滤", () => {
+    expect(filterRows(seeded(), "backend", "done").length).toBe(1);
+    expect(filterRows(seeded(), "backend", "failed").length).toBe(0);
   });
 });

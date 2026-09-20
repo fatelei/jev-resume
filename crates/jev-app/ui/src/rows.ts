@@ -173,3 +173,37 @@ export function seniorityDisplay(
   if (!key) return "-";
   return labels[key] ?? key;
 }
+
+// ── 搜索 / 筛选 ──
+
+export type StatusFilter = "all" | "running" | "done" | "failed";
+
+export const STATUS_FILTER_TEXT: Record<StatusFilter, string> = {
+  all: "全部状态",
+  running: "进行中",
+  done: "完成",
+  failed: "失败",
+};
+
+const RUNNING_STATES: ReadonlySet<FileState> = new Set([
+  "pending",
+  "extracting",
+  "queued",
+  "judging",
+]);
+
+/** 按文件名关键字 + 状态筛选，返回按插入序的行（纯函数）。 */
+export function filterRows(
+  state: RowsState,
+  query: string,
+  status: StatusFilter,
+): Row[] {
+  const q = query.trim().toLowerCase();
+  return state.order.map((p) => state.byPath[p]).filter((r) => {
+    if (q && !r.file_name.toLowerCase().includes(q)) return false;
+    if (status === "done" && r.state !== "done") return false;
+    if (status === "failed" && r.state !== "failed") return false;
+    if (status === "running" && !RUNNING_STATES.has(r.state)) return false;
+    return true;
+  });
+}

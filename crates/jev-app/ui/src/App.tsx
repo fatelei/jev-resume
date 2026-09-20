@@ -1,4 +1,4 @@
-//! 应用骨架：事件订阅 + 拖拽 + 各操作的处理编排。
+//! 应用骨架：事件订阅 + 拖拽 + 搜索/筛选 + 各操作的处理编排。
 
 import { useCallback, useEffect, useReducer, useMemo, useState } from "react";
 import { getCurrentWebview } from "@tauri-apps/api/webview";
@@ -18,10 +18,11 @@ import {
 } from "./api";
 import {
   STATUS_TEXT,
-  countByState,
   emptyRows,
+  filterRows,
   rowsReducer,
   seniorityDisplay,
+  type StatusFilter,
 } from "./rows";
 import { Toolbar } from "./components/Toolbar";
 import { ResultsTable } from "./components/ResultsTable";
@@ -33,6 +34,8 @@ export default function App() {
   const [meta, setMeta] = useState<Meta | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
 
   const seniorityLabels = useMemo(() => {
     const map: Record<string, string> = {};
@@ -41,6 +44,12 @@ export default function App() {
     }
     return map;
   }, [meta]);
+
+  /** 当前搜索/筛选下的可见行（导出与表格共用，所见即所得） */
+  const visibleRows = useMemo(
+    () => filterRows(rowsState, query, statusFilter),
+    [rowsState, query, statusFilter],
+  );
 
   // 启动：读 meta + 订阅流水线事件 + 拖拽
   // eslint-disable-next-line react-hooks/exhaustive-deps -- importPaths 为稳定 useCallback([])
@@ -119,30 +128,36 @@ export default function App() {
     cancelBatch().catch((e) => setNotice(`取消失败: ${String(e)}`));
   }, []);
 
+  /** 清空当前表格视图（不动磁盘缓存，缓存命中仍在） */
+  const onClear = useCallback(() => {
+    dispatch({ type: "reset" });
+    setQuery("");
+    setStatusFilter("all");
+    setNotice(null);
+  }, []);
+
+  /** 导出当前筛选下的可见行 */
   const onExport = useCallback(async () => {
     try {
       const picked = await pickSavePath("resume-results.csv");
       if (!picked) return;
-      const exportRows: ExportRowInput[] = rowsState.order.map((p) => {
-        const row = rowsState.byPath[p];
-        return {
-          file_name: row.file_name,
-          status: STATUS_TEXT[row.state],
-          role_category: row.judgment?.role_category ?? "",
-          seniority: seniorityDisplay(row.judgment?.seniority ?? null, seniorityLabels),
-          strength: row.judgment?.strength ?? null,
-          inflation: row.judgment?.inflation ?? null,
-          elapsed_ms: row.elapsed_ms,
-          cached: row.cached,
-          note: row.error ?? "",
-        };
-      });
+      const exportRows: ExportRowInput[] = visibleRows.map((row) => ({
+        file_name: row.file_name,
+        status: STATUS_TEXT[row.state],
+        role_category: row.judgment?.role_category ?? "",
+        seniority: seniorityDisplay(row.judgment?.seniority ?? null, seniorityLabels),
+        strength: row.judgment?.strength ?? null,
+        inflation: row.judgment?.inflation ?? null,
+        elapsed_ms: row.elapsed_ms,
+        cached: row.cached,
+        note: row.error ?? "",
+      }));
       await exportResults(exportRows, picked.path, picked.format);
       setNotice(`已导出 ${exportRows.length} 行 → ${picked.path}`);
     } catch (e) {
       setNotice(`导出失败: ${String(e)}`);
     }
-  }, [rowsState, seniorityLabels]);
+  }, [visibleRows, seniorityLabels]);
 
   const onOpenSettings = useCallback(() => setSettingsOpen(true), []);
   const onCloseSettings = useCallback(() => setSettingsOpen(false), []);
@@ -155,20 +170,24 @@ export default function App() {
       .catch((e) => setNotice(`刷新配置状态失败: ${String(e)}`));
   }, []);
 
-  const done = countByState(rowsState, "done");
-
   return (
     <div className="app">
       <Toolbar
         running={rowsState.running}
-        canExport={done > 0}
+        canExport={visibleRows.length > 0}
         hasApiKey={meta?.has_api_key ?? true}
         configPath={meta?.config_path ?? null}
+        hasRows={rowsState.order.length > 0}
+        query={query}
+        statusFilter={statusFilter}
         onPickFiles={onPickFiles}
         onPickFolder={onPickFolder}
         onCancel={onCancel}
         onExport={onExport}
         onOpenSettings={onOpenSettings}
+        onQueryChange={setQuery}
+        onStatusFilter={setStatusFilter}
+        onClear={onClear}
       />
       {settingsOpen && (
         <SettingsDialog
@@ -183,7 +202,12 @@ export default function App() {
           （支持 PDF / DOCX / TXT，结果本地缓存）
         </div>
       ) : (
-        <ResultsTable state={rowsState} seniorityLabels={seniorityLabels} />
+        <ResultsTable
+          state={rowsState}
+          rows={visibleRows}
+          filterKey={`${query}|${statusFilter}`}
+          seniorityLabels={seniorityLabels}
+        />
       )}
       <StatusBar state={rowsState} notice={notice} />
     </div>

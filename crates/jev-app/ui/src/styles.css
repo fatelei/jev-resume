@@ -82,6 +82,52 @@ body {
   color: var(--muted);
 }
 
+.toolbar .search {
+  width: 150px;
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: inherit;
+}
+
+.toolbar .search:focus {
+  outline: 2px solid #bfdbfe;
+  border-color: var(--accent);
+}
+
+.toolbar .filter {
+  padding: 5px 6px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: inherit;
+  background: #fff;
+  color: var(--text);
+}
+
+/* ── 分页 ── */
+
+.pager {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 6px 12px;
+  background: #fafbfc;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 12px;
+}
+
+td.no-match {
+  text-align: center;
+  color: var(--muted);
+  padding: 24px 0;
+}
+
 .key-warning {
   max-width: 40%;
   overflow: hidden;
