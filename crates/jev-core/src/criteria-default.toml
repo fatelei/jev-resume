@@ -1,0 +1,52 @@
+[meta]
+version = 1
+schema = 1
+
+[[category]]
+key = "backend"
+label = "后端开发"
+description = "以服务端逻辑为主体: API/服务开发、数据库设计与调优、分布式与高并发、消息队列、缓存、微服务"
+
+[[category]]
+key = "frontend"
+label = "前端开发"
+description = "以浏览器端界面为主体: Web 前端框架(React/Vue 等)、工程化、性能优化、小程序、混合开发"
+
+[[category]]
+key = "mobile"
+label = "移动端开发"
+description = "iOS/Android/跨端(Flutter/RN)应用开发为主体"
+
+[[category]]
+key = "algorithms"
+label = "算法工程师"
+description = "机器学习/深度学习/推荐/搜索/NLP/CV 模型的训练调优与落地为主体, 含大模型训练与应用"
+
+[[category]]
+key = "data"
+label = "数据研发/分析"
+description = "数据仓库、ETL/数据管道、大数据平台(Spark/Flink)、BI 报表与业务数据分析为主体"
+
+[[category]]
+key = "qa"
+label = "测试/QA"
+description = "测试策略与执行、自动化测试、性能测试、质量保障流程建设为主体"
+
+[[category]]
+key = "devops"
+label = "运维/SRE/基础架构"
+description = "部署运维、容器编排(K8s)、CI/CD、监控告警、云平台与稳定性建设为主体"
+
+[[category]]
+key = "product"
+label = "产品经理"
+description = "需求分析、产品设计、原型与 PRD、项目推进与跨职能协作为主体, 而非技术实现"
+
+[[category]]
+key = "other"
+label = "其他/混合"
+description = "以上均不匹配, 或多方向均衡无明显主体(全栈、技术管理、创业等)"
+
+[state]
+# 可选: 追加到每份简历判定前的提示, 留空则不追加
+extra_instructions = ""

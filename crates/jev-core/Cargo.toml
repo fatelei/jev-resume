@@ -1,0 +1,31 @@
+[package]
+name = "jev-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Jev 简历分类核心: 提取/判定/流水线/导出 (无 UI 依赖)"
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync", "time", "fs"] }
+tokio-util = "0.7"
+async-channel = "2"
+
+toml = "0.8"
+sha2 = "0.10"
+hex = "0.4"
+zip = { version = "2", default-features = false, features = ["deflate"] }
+quick-xml = "0.36"
+pdfium-render = "0.8"
+csv = "1"
+walkdir = "2"
+dirs = "5"
+
+[dev-dependencies]
+wiremock = "0.6"
+tempfile = "3"
+tokio = { version = "1", features = ["test-util"] }

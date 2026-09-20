@@ -1,0 +1,22 @@
+[package]
+name = "jev-app"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "回答透视镜姊妹篇: Jev 简历批量分类桌面应用 (GPUI)"
+
+[[bin]]
+name = "jev-resume"
+path = "src/main.rs"
+
+[dependencies]
+jev-core = { path = "../jev-core" }
+async-channel = "2"
+futures = "0.3"
+serde = { workspace = true }
+serde_json = { workspace = true }
+anyhow = { workspace = true }
+# 必须与 gpui-component 内部使用同一份 gpui (gpui-pre 0.3.5 改名), 否则类型冲突
+gpui = { version = "0.3.5", package = "gpui-pre" }
+gpui-component = "=0.6.4"
+gpui-platform = { version = "0.3.5", package = "gpui-pre-platform" }

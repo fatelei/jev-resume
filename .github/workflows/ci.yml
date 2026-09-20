@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-14
+            pdfium_asset: pdfium-mac-arm64.tgz
+            pdfium_lib: libpdfium.dylib
+          - os: ubuntu-22.04
+            pdfium_asset: pdfium-linux-x64.tgz
+            pdfium_lib: libpdfium.so
+          - os: windows-2022
+            pdfium_asset: pdfium-win-x64.zip
+            pdfium_lib: pdfium.dll
+    runs-on: ${{ matrix.os }}
+    env:
+      PDFIUM_DYNAMIC_LIB_PATH: ${{ github.workspace }}/vendor/pdfium/lib/${{ matrix.pdfium_lib }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Provision pdfium
+        shell: bash
+        run: |
+          mkdir -p vendor/pdfium
+          curl -sL "https://github.com/bblanchon/pdfium-binaries/releases/download/chromium/6943/${{ matrix.pdfium_asset }}" -o vendor/pdfium/asset
+          cd vendor/pdfium
+          case "${{ matrix.pdfium_asset }}" in
+            *.tgz) tar -xzf asset ;;
+            *.zip) unzip -oq asset ;;
+          esac
+          ls lib/
+
+      - name: Install Linux system deps (app build only)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libxkbcommon-dev libxkbcommon-x11-dev libwayland-dev \
+            libxcb1-dev libxcb-render0-dev libxcb-shape0-dev libxcb-xfixes0-dev libfontconfig1-dev
+
+      - name: Test core (all platforms)
+        run: cargo test -p jev-core
+
+      - name: Build app (all platforms)
+        run: cargo build -p jev-app
+
+      - name: Clippy
+        run: cargo clippy -p jev-core -- -D warnings
+
+      - name: Format check
+        run: cargo fmt --check
